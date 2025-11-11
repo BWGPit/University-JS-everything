@@ -24,14 +24,14 @@ function add(x, y) {
 
 function mul(x, y) {
     if (y == null) {return null}
-    if (val(y) == 1) {return x}
+    if (y.s == null) {return x}
     x = add(x, mul(x, y.s))
     return x
 }
 
 function exp(x, y) {
     if (y == null) {return {s: null}}
-    if (val(y) == 1) {return x}
+    if (y.s == null) {return x}
     x = mul(x, exp(x, y.s))
     return x
 }
