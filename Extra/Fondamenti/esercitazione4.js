@@ -30,7 +30,7 @@ function ins(n, bt) {
 
 function main() {
     let t = {t1: {t1: null, a: 2, t2: null}, a: 5, t2: {t1: null, a: 7, t2: null}}
-    let tree2 = {t1: {t1: {t1: null, a: 1, t2: null}, a: 3, t2: {t1: null, a: 5, t2: null}}, a: 8, t2: {t1: null, a: 10, t2: {t1: {t1: null, a: 11, t2: null}, a: 13, t2: null}}}
+    let tree2 = {t1: {t1: {t1: null, a: 1, t2: null}, a: 3, t2: {t1: null, a: 5, t2: null}}, a: 8, t2: {t1: null, a: 10, t2: {t1: {t1: null, a: 12, t2: null}, a: 13, t2: null}}}
     console.log(ins(4, ins(11, tree2)))
     console.log(ins(11, ins(4, tree2)))
 }
