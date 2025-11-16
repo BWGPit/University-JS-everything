@@ -28,11 +28,22 @@ function ins(n, bt) {
     else if (n >= bt.a) return {t1: bt.t1, a: bt.a, t2: ins(n, bt.t2)}
 }
 
+function ordinato(bt) {
+    if (!bt) return true
+    if (!(bt.a >= max(bt.t1))) return false
+    if (!(bt.a <= min(bt.t2))) return false
+    else return ordinato(bt.t1) && ordinato(bt.t2)
+}
+
+// Per l'Esercizio 6, vedere ntermini.js in questa stessa cartella
+
 function main() {
     let t = {t1: {t1: null, a: 2, t2: null}, a: 5, t2: {t1: null, a: 7, t2: null}}
     let tree2 = {t1: {t1: {t1: null, a: 1, t2: null}, a: 3, t2: {t1: null, a: 5, t2: null}}, a: 8, t2: {t1: null, a: 10, t2: {t1: {t1: null, a: 12, t2: null}, a: 13, t2: null}}}
     console.log(ins(4, ins(11, tree2)))
+    console.log(ordinato(ins(4, ins(11, tree2))))
     console.log(ins(11, ins(4, tree2)))
+    console.log(ordinato(ins(11, ins(4, tree2))))
 }
 
 if (require.main === module) {main()}
