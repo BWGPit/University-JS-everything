@@ -44,10 +44,34 @@ function cifre(n) {
 
 // REVERSE
 
+function visit(head) {
+    if (!head) return []
+    let n = visit(head.next)
+    n.unshift(head.val)
+    return n
+}
+
+function listAppend(head, v) {
+    if (!head) return {val: v, next: null}
+    return listAppend(head.next, v)
+}
+
 function rev(head) {
-	if (!head.next) return head.val
-	n = rev(head.next)
-	return {val: head.next.val, next: n}
+    if (!head.next) return head
+    let r = rev(head.next)
+    head.next.next = head
+    head.next = null
+    return r
+}
+
+function copy(head) {
+    if (!head) return null
+    return {val: head.val, next: copy(head.next)}
+}
+
+function reverseList(head) {
+    let c = copy(head)
+    return rev(c)
 }
 
 function main() {
@@ -55,8 +79,10 @@ function main() {
     //console.log(contaSotto(Qa))
     //console.log(equal(Qa, {val: 2, sotto: 7, sx: {val: 4, sotto: 4, sx: {val: 6, sotto: 1}, dx: {val: 6, sotto: 2, dx:{val: 8, sotto: 1}}}, dx: {val: 7, sotto: 2, sx: {val: 8, sotto: 1}}}))
     let l = {val: 1, next: {val: 2, next: {val: 3, next: null}}}
-    rev(l)
-    console.log(l)
+    console.log(visit(l))
+    console.log(visit(copy(l)))
+    console.log(visit(reverseList(l)))
+    console.log(visit(l))
 }
 
 if (require.main === module) {main()}
