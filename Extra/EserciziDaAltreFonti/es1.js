@@ -74,15 +74,61 @@ function reverseList(head) {
     return rev(c)
 }
 
+// rpath()
+// TODO: TESTARE
+function rpath(T, v) {
+    if (T.val === v) return [v]
+    if (!T.figli) return undefined
+    for (let f of T.figli) {
+        let p = rpath(f, v)
+        if (p != undefined)
+            p.unshift(f.val)
+            return p
+    }
+}
+
+// partition_until()
+
+function partition_until(arr, depth) {
+    if (depth == 0 || arr.length == 1) return [arr]
+    let q = Math.ceil(arr.length/2)
+    let sx = arr.slice(0, q)
+    let dx = arr.slice(q+1, arr.length-1)
+    return partition_until(sx, depth-1).concat(partition_until(dx, depth-1))
+}
+
+// punti_spesa() funzione iterativa
+
+function punti_spesa(a) {
+    if (a.length == 0) return 0
+    let totale = 0
+    let contatoreLatte = 0
+    while (a.length > 0) {
+        let prodotto = a.pop()
+        if (["pane", "sapone", "acqua", "latte"].includes(prodotto)) {
+            totale++
+        } else return -1
+        if (prodotto == "latte") {
+            contatoreLatte++
+            if (contatoreLatte == 3) {
+                totale++
+                contatoreLatte = 0
+            }
+        }
+    }
+    return totale
+}
+
 function main() {
     //let Qa = {val: 2, sotto: 0, sx: {val: 4, sotto: 0, sx: {val: 6, sotto: 0}, dx: {val: 6, sotto: 0, dx:{val: 8, sotto: 0}}}, dx: {val: 7, sotto: 0, sx: {val: 8, sotto: 0}}};
     //console.log(contaSotto(Qa))
     //console.log(equal(Qa, {val: 2, sotto: 7, sx: {val: 4, sotto: 4, sx: {val: 6, sotto: 1}, dx: {val: 6, sotto: 2, dx:{val: 8, sotto: 1}}}, dx: {val: 7, sotto: 2, sx: {val: 8, sotto: 1}}}))
-    let l = {val: 1, next: {val: 2, next: {val: 3, next: null}}}
-    console.log(visit(l))
-    console.log(visit(copy(l)))
-    console.log(visit(reverseList(l)))
-    console.log(visit(l))
+    // let l = {val: 1, next: {val: 2, next: {val: 3, next: null}}}
+    // console.log(visit(l))
+    // console.log(visit(copy(l)))
+    // console.log(visit(reverseList(l)))
+    // console.log(visit(l))
+    console.log(punti_spesa(["pane", "latte", "sapone", "acqua"]))
 }
 
 if (require.main === module) {main()}
