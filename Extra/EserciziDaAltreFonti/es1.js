@@ -29,6 +29,19 @@ function contaSotto(T) {
     return T.sotto
 }
 
+/*
+Si scriva una funzione ricorsiva cifre(n) che, dato come argomento un intero
+positivo n, restituisca un array che in posizione i contiene la cifra i-esima
+di n, dalla più significativa alla meno significativa.
+*/
+
+function cifre(n) {
+    if (n < 10) return [n]
+    let arr = cifre(Math.trunc(n/10))
+    arr.push(n%10)
+    return arr
+}
+
 function main() {
     let Qa = {val: 2, sotto: 0, sx: {val: 4, sotto: 0, sx: {val: 6, sotto: 0}, dx: {val: 6, sotto: 0, dx:{val: 8, sotto: 0}}}, dx: {val: 7, sotto: 0, sx: {val: 8, sotto: 0}}};
     console.log(contaSotto(Qa))
