@@ -42,10 +42,21 @@ function cifre(n) {
     return arr
 }
 
+// REVERSE
+
+function rev(head) {
+	if (!head.next) return head.val
+	n = rev(head.next)
+	return {val: head.next.val, next: n}
+}
+
 function main() {
-    let Qa = {val: 2, sotto: 0, sx: {val: 4, sotto: 0, sx: {val: 6, sotto: 0}, dx: {val: 6, sotto: 0, dx:{val: 8, sotto: 0}}}, dx: {val: 7, sotto: 0, sx: {val: 8, sotto: 0}}};
-    console.log(contaSotto(Qa))
-    console.log(equal(Qa, {val: 2, sotto: 7, sx: {val: 4, sotto: 4, sx: {val: 6, sotto: 1}, dx: {val: 6, sotto: 2, dx:{val: 8, sotto: 1}}}, dx: {val: 7, sotto: 2, sx: {val: 8, sotto: 1}}}))
+    //let Qa = {val: 2, sotto: 0, sx: {val: 4, sotto: 0, sx: {val: 6, sotto: 0}, dx: {val: 6, sotto: 0, dx:{val: 8, sotto: 0}}}, dx: {val: 7, sotto: 0, sx: {val: 8, sotto: 0}}};
+    //console.log(contaSotto(Qa))
+    //console.log(equal(Qa, {val: 2, sotto: 7, sx: {val: 4, sotto: 4, sx: {val: 6, sotto: 1}, dx: {val: 6, sotto: 2, dx:{val: 8, sotto: 1}}}, dx: {val: 7, sotto: 2, sx: {val: 8, sotto: 1}}}))
+    let l = {val: 1, next: {val: 2, next: {val: 3, next: null}}}
+    rev(l)
+    console.log(l)
 }
 
 if (require.main === module) {main()}
