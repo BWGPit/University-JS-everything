@@ -75,15 +75,15 @@ function reverseList(head) {
 }
 
 // rpath()
-// TODO: TESTARE
 function rpath(T, v) {
     if (T.val === v) return [v]
     if (!T.figli) return undefined
     for (let f of T.figli) {
         let p = rpath(f, v)
-        if (p != undefined)
-            p.unshift(f.val)
+        if (p != undefined) {
+            p.push(T.val)
             return p
+        }
     }
 }
 
