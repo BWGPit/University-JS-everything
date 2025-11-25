@@ -48,6 +48,35 @@ function contaNodi(t) {
 	return 1 + contaNodi(t.sx) + contaNodi(t.dx)
 }
 
+// Contare quanti nodi contengono il valore cercato
+
+function contaK(t, k) {
+	if (!t) return 0
+	return (t.val===k?1:0)+contaK(t.sx, k)+contaK(t.dx, k)
+}
+
+// Scambiare i rami di un albero binario
+
+function scambiaNodi(t) {
+	return {val: t.val, sx: t.dx, dx: t.sx}
+}
+
+// Tagliare da un albero binario tutti i rami che iniziano da un nodo
+
+function sionTaglialegna(t, k) {
+	// https://ddragon.leagueoflegends.com/cdn/img/champion/splash/Sion_3.jpg
+	if (t) {
+		if (t.val === k) {
+			delete t.sx
+			delete t.dx
+		}
+		else {
+			sionTaglialegna(t.sx, k)
+			sionTaglialegna(t.dx, k)
+		}
+	}
+}
+
 // Massimo in un albero k-ario
 
 function maxK(t) {
@@ -75,9 +104,11 @@ function stampaAk(t) {
 }
 
 function main() {
-    let testtree = {val: 3, sx: {val: 2, sx: {val: 4}, dx: {val: 1, sx: {val: 6}}}, dx: {val: 7, dx: {val: 5}}}
+    let testtree = {val: 3, sx: {val: 1, sx: {val: 4}, dx: {val: 1, sx: {val: 6}}}, dx: {val: 1, dx: {val: 5}}}
     let ak = {val: 7, figli: [{val: 3, figli: [{val: 12}, {val: 8}]}, {val: 10}, {val: 4}]}
-    console.log(stampaAk(ak))
+    console.log(testtree)
+	sionTaglialegna(testtree, 1)
+	console.log(testtree)
 }
 
 main()
