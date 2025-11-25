@@ -103,6 +103,12 @@ function stampaAk(t) {
 	}
 }
 
+// Cerca K in un albero
+
+function kInKAhri() {
+	
+}
+
 function main() {
     let testtree = {val: 3, sx: {val: 1, sx: {val: 4}, dx: {val: 1, sx: {val: 6}}}, dx: {val: 1, dx: {val: 5}}}
     let ak = {val: 7, figli: [{val: 3, figli: [{val: 12}, {val: 8}]}, {val: 10}, {val: 4}]}
