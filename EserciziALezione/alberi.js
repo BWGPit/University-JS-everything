@@ -105,16 +105,36 @@ function stampaAk(t) {
 
 // Cerca K in un albero
 
-function kInKAhri() {
-	
+function kInKAhri(t, k) {
+	if (!t) return false
+	if (t.val === k) return true
+	if (t.figli) {
+		for (let f of t.figli) {
+			if (kInKAhri(f, k)) return true
+		}
+	}
+	return false
+}
+
+// Applica una funzione a tutti i valori in un albero
+
+function applica(t, f) {
+	if (t) {
+		t.val = f(t.val)
+		if (t.figli) {
+			for (let figlio of t.figli) {
+				applica(figlio, f)
+			}
+		}
+	}
 }
 
 function main() {
     let testtree = {val: 3, sx: {val: 1, sx: {val: 4}, dx: {val: 1, sx: {val: 6}}}, dx: {val: 1, dx: {val: 5}}}
     let ak = {val: 7, figli: [{val: 3, figli: [{val: 12}, {val: 8}]}, {val: 10}, {val: 4}]}
-    console.log(testtree)
-	sionTaglialegna(testtree, 1)
-	console.log(testtree)
+    console.log(ak)
+	applica(ak, (x) => 0)
+	console.log(ak)
 }
 
-main()
+if (require.main === module) main()
