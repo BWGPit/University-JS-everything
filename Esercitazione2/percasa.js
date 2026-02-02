@@ -18,10 +18,8 @@ function indicemultiplo(A, k) {
         return [primo, ultimo]
     else if (typeof primo === "undefined" && typeof ultimo === "undefined")
         return []
-    else if (typeof primo !== "undefined" && typeof ultimo === "undefined")
-        return [primo, primo]
     else
-        return [ultimo, ultimo]
+        return [primo, primo]
 }
 
 // 2
