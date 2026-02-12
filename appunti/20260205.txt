@@ -1,0 +1,6 @@
+protype: dichiarata automaticamente al linguaggio quando si dichiara una funzione, che contiene un oggetto pronto per fare dda protipo per gli oggetti inizializzati dalla funzione.
+
+L'operatore new assegna automaticamente come prototipo dell'oggetto creato, il prototype della sua funzione costruttore.
+
+Ciò crea un vero legame permanenete fra gli oggetti e i loro costruttori... praticamente un tipo!
+

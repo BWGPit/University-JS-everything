@@ -1,0 +1,183 @@
+lectio XV - Classi e Prototipi
+
+1. Differenza tra Prototype e __proto__
+
+- `prototype`: è una proprietà delle **funzioni costruttori** (o delle classi). Viene usata come "stampino" per assegnare il `__proto__` alle istanze create con `new`.
+- `__proto__`: è la proprietà presente su **tutti gli oggetti** (istanze). Punta al prototipo del costruttore che ha creato l'oggetto. È il link fisico nella catena dei prototipi.
+
+2. Dichiarazione di una classe
+
+È syntactic sugar sopra i prototipi.
+
+// Dichiarazione classica
+class Persona {
+    constructor(n, e) {
+        this.nome = n;
+        this.eta = e;
+    }
+}
+
+// Espressione di classe
+var Persona = class {
+    constructor(n, e) {
+        this.nome = n;
+        this.eta = e;
+    }
+}
+
+3. Catena dei prototipi (Prototype Chain)
+
+Ogni oggetto in JavaScript ha un link interno (`__proto__`) che punta a un altro oggetto (il suo prototipo).
+Quando si cerca una proprietà o un metodo:
+1. JS cerca nell'oggetto stesso.
+2. Se non lo trova, guarda nel suo `__proto__`.
+3. Continua a risalire la catena fino a trovare `null`.
+
+4. Ereditarietà (Inheritance)
+
+Una classe può estendere un'altra classe usando `extends`.
+- **Superclasse**: la classe genitore (base).
+- **Sottoclasse**: la classe figlia che eredita proprietà e metodi.
+
+Caratteristiche:
+- La sottoclasse eredita tutti i metodi della superclasse.
+- Può aggiungere nuovi metodi propri.
+- **Override**: Una sottoclasse può ridefinire un metodo esistente della superclasse (stesso nome).
+- **Overload**: In JS non esiste l'overload diretto (stesso nome, parametri diversi) come in Java/C++. Se ridefinisci un metodo, l'ultimo vince. Si simula controllando i parametri dentro la funzione.
+- È possibile usare `delete` sul prototipo per rimuovere metodi, ma è sconsigliato (de-ottimizza il codice).
+
+5. Esempio Pratico
+
+class Studente {
+    nome;
+    
+    constructor(n) {
+        this.nome = n;
+    }
+    
+    laurea() {
+        return "grande fra! complimenti";
+    }
+}
+
+let p = new Studente("andrea");
+console.log(p.laurea());
+
+class StudenteMagistrale extends Studente {
+    matricola;
+    
+    constructor(n, m) {
+        super(n); // Chiama il costruttore della superclasse
+        this.matricola = m;
+    }
+
+    // Override del metodo laurea
+    laurea() {
+        // super.laurea() chiama il metodo originale
+        return super.laurea() + " io sono ancora fermo alla triennale";
+    }
+}
+
+let pippo = new StudenteMagistrale("paolino", "123456");
+console.log(pippo.laurea());
+
+6. Membri Statici (`static`)
+
+I metodi e le proprietà statiche appartengono alla classe, non alle istanze.
+Si chiamano direttamente sulla classe (es. `NomeClasse.metodo()`).
+Utili per funzioni di utilità o costanti.
+
+class Calcolatrice {
+    static PI = 3.14;
+    static areaCerchio(r) {
+        return this.PI * r * r;
+    }
+}
+// console.log(Calcolatrice.areaCerchio(2)); // Funziona
+// let c = new Calcolatrice(); c.areaCerchio(2); // Errore
+
+7. Encapsulamento: Getter, Setter e Campi Privati
+
+- **Getter/Setter**: Intercettano l'accesso alle proprietà. Sembrano variabili ma eseguono funzioni.
+- **Campi Privati (`#`)**: Dallo standard ES2022, i campi che iniziano con `#` sono realmente privati (inaccessibili da fuori).
+
+class Conto {
+    #saldo = 0; // Campo privato reale
+
+    constructor(saldoIniziale) {
+        this.#saldo = saldoIniziale;
+    }
+
+    get saldo() { // Getter
+        return `Il saldo è ${this.#saldo}€`;
+    }
+
+    set saldo(valore) { // Setter
+        if (valore < 0) throw new Error("Saldo negativo non ammesso");
+        this.#saldo = valore;
+    }
+}
+
+8. Controllo dei Tipi (`instanceof`)
+
+L'operatore `instanceof` verifica se il `prototype` di una classe compare nella catena dei prototipi di un oggetto.
+
+// console.log(pippo instanceof StudenteMagistrale); // true
+// console.log(pippo instanceof Studente); // true (per ereditarietà)
+// console.log(pippo instanceof Object); // true
+
+9. Polimorfismo
+
+Capacità di oggetti di classi diverse (ma imparentate) di rispondere allo stesso metodo in modi specifici (vedi override di `laurea` nell'esempio sopra).
+Il codice cliente (chi usa l'oggetto) non deve sapere la classe specifica, basta che sappia l'interfaccia (il metodo `laurea` esiste).
+
+10. Differenze Tecniche Importanti
+
+- **Hoisting**: A differenza delle funzioni (`function X() {}`), le classi **non** subiscono hoisting. Devono essere definite prima di essere istanziate.
+- **Strict Mode**: Il corpo delle classi è sempre in *Strict Mode* automaticamente.
+- **Costruttore**: Se non definisci un costruttore, ne viene creato uno vuoto di default (che chiama `super()` se eredita).
+- **Abstract Classes**: In JS puro non esistono classi astratte native, ma si possono simulare controllando `new.target` nel costruttore.
+
+11. Linguaggio UML (Unified Modeling Language) - Diagramma delle Classi
+
+L'UML è uno standard grafico per visualizzare, specificare, costruire e documentare i software. Il **Diagramma delle Classi** descrive la struttura statica del sistema.
+
+A. Rappresentazione di una Classe
+Un rettangolo diviso in 3 sezioni:
+1. **Nome Classe**: In alto, centrato, CapitalCase (es. `Studente`). Se astratta, il nome è in *corsivo*.
+2. **Attributi**: Al centro. Sintassi: `visibilità nome: tipo` (es. `- matricola: String`).
+3. **Metodi**: In basso. Sintassi: `visibilità nome(parametri): tipo_ritorno` (es. `+ laurea(): String`).
+
+B. Modificatori di Visibilità
+- `+` **Public**: Accessibile da chiunque.
+- `-` **Private**: Accessibile solo dalla classe stessa.
+- `#` **Protected**: Accessibile dalla classe e dalle sottoclassi.
+- `~` **Package/Default**: Accessibile solo nel package (raro in JS, comune in Java).
+- Sottolineato: **Static** (es. `<u>+ getPgreco(): double</u>`).
+
+C. Relazioni tra Classi
+
+1. **Generalizzazione (Ereditarietà)**
+   - Riferimento: `extends`.
+   - Simbolo: Linea continua con **triangolo vuoto** che punta alla superclasse.
+   - Es: `StudenteMagistrale` ──▷ `Studente`.
+
+2. **Associazione**
+   - Riferimento: Una classe "usa" o "conosce" un'altra.
+   - Simbolo: Linea semplice (volendo con freccia aperta per navigabilità).
+   - Es: `Professore` ── `Corso`.
+
+3. **Aggregazione (Relazione "Has-a" debole)**
+   - Riferimento: Il tutto contiene le parti, ma le parti possono vivere da sole.
+   - Simbolo: Linea con **rombo vuoto** lato contenitore.
+   - Es: `Aula` ◇── `Sedia` (Se l'aula viene distrutta, le sedie possono essere spostate).
+
+4. **Composizione (Relazione "Has-a" forte)**
+   - Riferimento: Il tutto possiede le parti e il loro ciclo di vita è legato.
+   - Simbolo: Linea con **rombo pieno** lato contenitore.
+   - Es: `Uomo` ◆── `Cervello` (Se muore l'uomo, il cervello non esiste più).
+
+5. **Dipendenza**
+   - Riferimento: Cambiamenti in una classe influenzano l'altra (es. parametro di un metodo).
+   - Simbolo: Linea tratteggiata con freccia aperta (`------->`).
+
