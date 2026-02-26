@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lezione di Algebra Lineare: Sistemi, Indipendenza e Basi</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f4f7f6;
+        }
+        header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+        h2 {
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+            margin-top: 40px;
+        }
+        h3 {
+            color: #2980b9;
+        }
+        .concept-box {
+            background-color: white;
+            border-left: 5px solid #3498db;
+            padding: 15px 20px;
+            margin: 20px 0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .definition {
+            background-color: #e8f4fd;
+            border: 1px solid #3498db;
+            padding: 15px;
+            border-radius: 5px;
+            font-style: italic;
+        }
+        .example {
+            background-color: #fdf9e7;
+            border-left: 5px solid #f1c40f;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        code {
+            background-color: #eee;
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .math {
+            font-family: "Times New Roman", Times, serif;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+        hr {
+            border: 0;
+            height: 1px;
+            background: #ccc;
+            margin: 40px 0;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Algebra Lineare</h1>
+    <p>Sistemi Lineari, Indipendenza e Definizione di Base</p>
+</header>
+
+<section>
+    <h2>1. Sistemi Lineari e Matrici Nulle</h2>
+    <p>Partiamo dall'analisi del sistema omogeneo <span class="math">Ax = 0</span>.</p>
+    
+    <div class="concept-box">
+        <p><strong>Cosa succede se la matrice A è nulla?</strong></p>
+        <ul>
+            <li>Se la matrice è composta solo da zeri, il sistema ha <strong>infinite soluzioni</strong> (precisamente <span class="math">&infin;<sup>n</sup></span>).</li>
+            <li>Se invece il sistema ammette <strong>solo</strong> la soluzione nulla (il vettore zero), allora la matrice non può essere identicamente nulla.</li>
+        </ul>
+    </div>
+
+    <p>Un sistema ammette una sola soluzione quando la matrice dei coefficienti ha il "giusto numero di pivot", garantendo che le colonne non siano linearmente dipendenti.</p>
+</section>
+
+<section>
+    <h2>2. Rappresentazione del Prodotto Matrice-Vettore</h2>
+    <p>Rivediamo come interpretare il prodotto <span class="math">Ax</span> come combinazione lineare delle colonne della matrice:</p>
+
+    <div class="definition">
+        Il sistema <span class="math">Ax = b</span> può essere riscritto come:
+        <br><br>
+        <span class="math">x<sub>1</sub>(Colonna<sub>1</sub>) + x<sub>2</sub>(Colonna<sub>2</sub>) + ... + x<sub>n</sub>(Colonna<sub>n</sub>) = b</span>
+    </div>
+
+    <p>In questo contesto, ci muoviamo in uno spazio vettoriale dove:</p>
+    <ul>
+        <li>Le <strong>colonne</strong> della matrice sono elementi dello spazio.</li>
+        <li>Hanno tante componenti quante sono le righe (<span class="math">R<sup>m</sup></span>).</li>
+        <li>Il prodotto matrice-vettore vive nello <strong>Span</strong> delle colonne.</li>
+    </ul>
+
+    
+</section>
+
+<section>
+    <h2>3. Caratterizzazione dell'Indipendenza Lineare</h2>
+    <p>Abbiamo dimostrato un teorema fondamentale che lega i sistemi omogenei all'indipendenza lineare:</p>
+    
+    <div class="concept-box">
+        <strong>Teorema:</strong> Il sistema <span class="math">Ax = 0</span> ammette solamente la soluzione nulla 
+        <span class="math">iff</span> le colonne della matrice <span class="math">A</span> sono 
+        <strong>linearmente indipendenti</strong>.
+    </div>
+</section>
+
+<hr>
+
+<section>
+    <h2>4. Il Concetto di Base</h2>
+    <p>Dato uno spazio vettoriale con le sue operazioni di somma e prodotto per scalare, vogliamo identificare un insieme finito di elementi che permetta di generare l'intero spazio.</p>
+
+    <h3>Definizione di Base</h3>
+    <div class="definition">
+        Un insieme di vettori <span class="math">{v<sub>1</sub>, v<sub>2</sub>, ..., v<sub>k</sub>}</span> è una <strong>base</strong> di uno spazio vettoriale <span class="math">V</span> se verifica due condizioni:
+        <ol>
+            <li><strong>Generano lo spazio (Generatori):</strong> Ogni elemento <span class="math">u &isin; V</span> può essere scritto come combinazione lineare dei vettori della base.</li>
+            <li><strong>Sono linearmente indipendenti:</strong> Nessun vettore della base può essere espresso come combinazione degli altri (il minimo numero di elementi necessari).</li>
+        </ol>
+    </div>
+
+    
+</section>
+
+<section>
+    <h2>5. Esempi Notevoli</h2>
+
+    <div class="example">
+        <h3>Esempio 0: Lo spazio R<sup>1</sup></h3>
+        <p>In <span class="math">R</span>, una base è costituita da un <strong>qualsiasi numero diverso da zero</strong>. Ad esempio, il numero 1 è la base più naturale. Se prendessimo due numeri (es. 1 e 2), non sarebbero più linearmente indipendenti e la rappresentazione non sarebbe unica.</p>
+    </div>
+
+    <div class="example">
+        <h3>Esempio: La Base Canonica di R<sup>n</sup></h3>
+        <p>Per <span class="math">R<sup>n</sup></span>, la scelta più economica e semplice è la <strong>base canonica</strong> <span class="math">{e<sub>1</sub>, e<sub>2</sub>, ..., e<sub>n</sub>}</span>:</p>
+        <ul>
+            <li><span class="math">e<sub>1</sub> = (1, 0, 0, ...)</span></li>
+            <li><span class="math">e<sub>2</sub> = (0, 1, 0, ...)</span></li>
+            <li><span class="math">e<sub>n</sub> = (0, 0, 0, ..., 1)</span></li>
+        </ul>
+        <p>Questi vettori generano tutto lo spazio e sono chiaramente indipendenti.</p>
+    </div>
+</section>
+
+<footer>
+    <p><em>Fine della lezione. Prepararsi per gli esercizi tratti dai temi d'esame.</em></p>
+</footer>
+
+</body>
+</html>
