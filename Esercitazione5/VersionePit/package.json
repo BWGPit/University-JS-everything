@@ -1,0 +1,12 @@
+{
+  "name": "gradebook",
+  "version": "1.0.0",
+  "description": "GradeBook",
+  "main": "gradebook.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"test\""
+  },
+  "author": "",
+  "license": "ISC"
+}

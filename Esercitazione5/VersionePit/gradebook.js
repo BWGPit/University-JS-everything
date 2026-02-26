@@ -1,16 +1,16 @@
 import * as fs from "fs"
 
-class GenericGradeError extends Error {
+export class GenericGradeError extends Error {
     constructor(m) {super(m)}
 }
-class InvalidCreditsError extends GenericGradeError {}
-class InvalidValueError extends GenericGradeError {}
-class InvalidGradeError extends GenericGradeError {}
-class DuplicatedGradeError extends GenericGradeError {}
-class MissingCreditsError extends GenericGradeError {}
+export class InvalidCreditsError extends GenericGradeError {}
+export class InvalidValueError extends GenericGradeError {}
+export class InvalidGradeError extends GenericGradeError {}
+export class DuplicatedGradeError extends GenericGradeError {}
+export class MissingCreditsError extends GenericGradeError {}
 
 
-class Grade {
+export class Grade {
     #name
     #credits
     #date
@@ -65,7 +65,7 @@ class Grade {
     fromJSON() {}
 }
 
-class GradeBook {
+export class GradeBook {
     #grades
     #totalCredits
     #credits
@@ -146,13 +146,13 @@ class GradeBook {
     }
 }
 
-class BachelorGradeBook extends GradeBook {
+export class BachelorGradeBook extends GradeBook {
     constructor() {
         super(180)
     }
 }
 
-class MasterGradeBook extends GradeBook {
+export class MasterGradeBook extends GradeBook {
     constructor() {
         super(120)
     }
@@ -167,5 +167,3 @@ function main() {
     gb.fromJSON(testfile)
     console.log(gb.toString())
 }
-
-main()
