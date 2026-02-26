@@ -1,3 +1,5 @@
+import * as fs from "fs"
+
 class GenericGradeError extends Error {
     constructor(m) {super(m)}
 }
@@ -17,7 +19,7 @@ class Grade {
     constructor(n, c, d, g, h) {
         this.#name = n
         if (typeof c != "number" || c < 0)
-            throw new InvalidCreditsError("Invalid credits")
+            throw new InvalidCreditsError("Invalid credits for " + String(c))
         this.#credits = c
         this.#date = new Date(d)
         if (typeof g != "number" || g < 18 || g > 30)
@@ -27,6 +29,11 @@ class Grade {
             throw new InvalidValueError("Honors must come with a 30")
         this.#honors = h
     }
+    get grade() {return this.#grade}
+    get credits() {return this.#credits}
+    get name() {return this.#name}
+    get date() {return this.#date}
+    get honors() {return this.#honors}
 
     equals(g) {
         if (!(g instanceof Grade)) {
@@ -40,14 +47,22 @@ class Grade {
             g.#honors === this.honors
         )
     }
+
     toString() {
         return `${this.#name}\n${this.#credits} credits\nDate: ${this.#date.toString()}\nGrade: ${this.#grade}` + (this.#honors?" cum laude":"")
     }
-    get grade() {return this.#grade}
-    get credits() {return this.#credits}
-    get name() {return this.#name}
-    get date() {return this.#date}
-    get honors() {return this.#honors}
+
+    gradeObject() {
+        return {
+            "name": this.#name,
+            "credits": this.#credits,
+            "date": this.#date,
+            "grade": this.#grade,
+            "honors": this.#honors
+        }
+    }
+    
+    fromJSON() {}
 }
 
 class GradeBook {
@@ -64,15 +79,17 @@ class GradeBook {
     get totalCredits() {return this.#totalCredits}
     get credits() {return this.#credits}
     get missingCredits() {return this.#missingCredits}
+
     get average() {
         let sum = 0
         let count = 0
         for (let gr of this.#grades) {
-            sum += (gr.honors?gr.grade+2:gr.honors) * gr.credits
+            sum += gr.honors?gr.grade+2:gr.grade * gr.credits
             count += gr.credits
         }
         return sum / count
     }
+
     get startingGrade() {
         if (this.missingCredits != 0) throw new MissingCreditsError("Missing credits")
         return Math.round(this.#grades.average*11/3)
@@ -91,14 +108,41 @@ class GradeBook {
         this.#grades.push(grade)
         this.#missingCredits -= grade.credits
         if (this.#missingCredits < 0) this.#missingCredits = 0
-        console.log(this.#grades)
     }
+
     toString() {
         let s = ""
         for (let g of this.#grades) {
             s += g.toString() + "\n"
         }
         return s
+    }
+
+    #JSONify() {
+        let json_grades = []
+        for (let g of this.#grades) {json_grades.push(g.gradeObject())}
+        return JSON.stringify({
+            "grades": json_grades,
+            "totalCredits": this.#totalCredits,
+            "credits": this.#credits,
+            "missingCredits": this.#missingCredits
+        })
+    }
+
+    exportJSON(f) {
+        fs.writeFileSync(f, this.#JSONify())
+    }
+
+    fromJSON(f) {
+        let file = JSON.parse(fs.readFileSync(f))
+        let retrieved_grades = []
+        for (let g of file["grades"]) {
+            retrieved_grades.push(new Grade(...Object.values(g)))
+        }
+        this.#grades = retrieved_grades
+        this.#totalCredits = file["totalCredits"]
+        this.#credits = file["credits"]
+        this.#missingCredits = file["missingCredits"]
     }
 }
 
@@ -115,9 +159,13 @@ class MasterGradeBook extends GradeBook {
 }
 
 function main() {
-    let g = new GradeBook(120)
-    g.register(new Grade("Pippo", 12, "2026/01/10", 20, false))
-    console.log(g.toString())
+    let testfile = "./Esercitazione5/gradebook.json"
+    // let g = new BachelorGradeBook()
+    // g.register(new Grade("Pippo", 12, "2026/01/10", 20, false))
+    // g.exportJSON()
+    let gb = new GradeBook()
+    gb.fromJSON(testfile)
+    console.log(gb.toString())
 }
 
-if (require.main === module) main()
+main()
