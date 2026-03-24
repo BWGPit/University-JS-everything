@@ -17,7 +17,6 @@ function applica(o: Point, p: Step[], f?: Trasformatore): Point | string | numbe
     if (f) {return f(posizioneFinale)}
     else {return posizioneFinale}
 }
-
 // Debug
 function testFn(): void {
     let stampaTest: Trasformatore = function(p) {
