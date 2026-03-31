@@ -2,7 +2,7 @@ interface TrieInterface {
     insert: (k: string) => void
     lookup: (k: string) => boolean
     size: number
-    prefixSearch: (p: string) => () => Generator<string, void, void>
+    prefixSearch: (p: string) => () => Generator<string|void, void, void>
 }
 
 interface TrieEdges {
@@ -60,31 +60,44 @@ class Trie implements TrieInterface {
         }
     }
 
-    prefixSearch(p: string): () => Generator<string, void, void> {
+    prefixSearch(p: string): () => Generator<string|void, void, void> {
         let thisNode: Trie = this
-        let f: () => Generator<string, void, void> = function*() {
-            let results: string[] = []
-            if (!thisNode.lookup(p)) {yield* results}
-            
-            // Da qui in avanti si è certi che p è costruibile
-            let prefixPath: string = thisNode.character
-            if (thisNode.character === "") {
-                thisNode = thisNode.edges[p[0]]
-                prefixPath = thisNode.character
-            }
-            while (prefixPath.length < p.length) {
-                thisNode = thisNode.edges[p[prefixPath.length]]
-                prefixPath += thisNode.character
-            }
-            
-            console.log(thisNode.character, thisNode.flag, prefixPath)
-            // Ora thisNode punta al nodo da cui bisogna partire per generare le parole
 
+        if (!thisNode.lookup(p)) {
+            let f: () => Generator<string|void, void, void> = function*() {yield}
+            return f
+        }
+            
+        // Da qui in avanti si è certi che p è costruibile
+        let prefixPath: string = thisNode.character
+        if (thisNode.character === "" && prefixPath.length < p.length) {
+            thisNode = thisNode.edges[p[0]]
+            prefixPath = thisNode.character
+        }
+        while (prefixPath.length < p.length) {
+            thisNode = thisNode.edges[p[prefixPath.length]]
+            prefixPath += thisNode.character
+        }
+        
+        let startingNode = thisNode
+        let word = p
+
+        console.log(thisNode.character, thisNode.flag, prefixPath)
+        
+        // Ora thisNode punta al nodo da cui bisogna partire per generare le parole
+        let f: () => Generator<string|void, void, void> = function*() {
             for (let c of Object.keys(thisNode.edges)) {
-                let word: string = p
-                // TODO: COMPLETARE
+                if (thisNode.edges[c].flag) {
+                    yield word + c
+                    thisNode = startingNode
+                    word = p
+                }
+                else {
+                    thisNode = thisNode.edges[c]
+                    word = word+c
+                    yield* f()
+                }
             }
-            yield* results
         }
         return f
     }
@@ -94,7 +107,11 @@ let t: Trie = new Trie()
 t.insert("pit")
 t.insert("hajimasekkiya")
 t.insert("hwaiting")
-let g: () => Generator<string, void, void> = t.prefixSearch("hajimasekk")
+let gx: () => Generator<string|void, void, void> = t.prefixSearch("h")
+for (let x of gx()) {
+    console.log(x)
+}
+let g: () => Generator<string|void, void, void> = t.prefixSearch("")
 for (let x of g()) {
     console.log(x)
 }
