@@ -2,7 +2,7 @@ interface TrieInterface {
     insert: (k: string) => void
     lookup: (k: string) => boolean
     size: number
-    prefixSearch: (p: string) => () => Generator<string|void, void, void>
+    prefixSearch: (p: string) => (w?: string, n?: Trie) => Generator<string|void, void, void>
 }
 
 interface TrieEdges {
@@ -60,11 +60,11 @@ class Trie implements TrieInterface {
         }
     }
 
-    prefixSearch(p: string): () => Generator<string|void, void, void> {
+    prefixSearch(p: string): (w?: string, n?: Trie) => Generator<string|void, void, void> {
         let thisNode: Trie = this
 
         if (!thisNode.lookup(p)) {
-            let f: () => Generator<string|void, void, void> = function*() {yield}
+            let f: (w?: string, n?: Trie) => Generator<string|void, void, void> = function*() {yield}
             return f
         }
             
@@ -79,23 +79,15 @@ class Trie implements TrieInterface {
             prefixPath += thisNode.character
         }
         
-        let startingNode = thisNode
-        let word = p
-
-        console.log(thisNode.character, thisNode.flag, prefixPath)
-        
         // Ora thisNode punta al nodo da cui bisogna partire per generare le parole
-        let f: () => Generator<string|void, void, void> = function*() {
-            for (let c of Object.keys(thisNode.edges)) {
-                if (thisNode.edges[c].flag) {
-                    yield word + c
-                    thisNode = startingNode
-                    word = p
+        let f: (w?: string, n?: Trie) => Generator<string|void, void, void> = function*(w = p, n = thisNode) {
+            for (let c of Object.keys(n.edges)) {
+                if (n.edges[c].flag) {
+                    yield w + c
+                    yield* f(w+c, n.edges[c])
                 }
                 else {
-                    thisNode = thisNode.edges[c]
-                    word = word+c
-                    yield* f()
+                    yield* f(w+c, n.edges[c])
                 }
             }
         }
