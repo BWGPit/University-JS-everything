@@ -1,50 +1,19 @@
-type matrixField = number|null
-
-class Matrix {
-    #mat: matrixField[][]
-    #raws: number
-    #columns: number
-    constructor(raws: number, columns: number) {
-        this.#raws = raws
-        this.#columns = columns
-        this.#mat = []
-        for (let i = 0; i < columns; i++) {
-            let thisRaw: matrixField[] = []
-            for (let j = 0; j < raws; j++) {
-                thisRaw.push(null)
-            }
-            this.#mat.push(thisRaw)
-        }
-    }
-    get mat() {return this.#mat}
-    get raws() {return this.#raws}
-    get columns() {return this.#columns}
-
-    public getKey(raw: number, column: number): matrixField {
-        return this.#mat[column][raw]
-    }
-
-    public setKey(key: matrixField, raw: number, column: number): void {
-        this.#mat[column][raw] = key
-    }
-}
-
 function robMatrix(nums: number[]): number {
     let m: Matrix = new Matrix(nums.length+1, nums.length+1)
-    for (let i = 0; i < m.raws; i++) {m.setKey(0, i, 0)}
+    for (let i = 0; i < m.rows; i++) {m.setKey(0, i, 0)}
     for (let j = 0; j < m.columns; j++) {m.setKey(0, 0, j)}
     if (nums.length == 0) {return 0}
-    for (let i = 1; i < m.raws; i++) {m.setKey(nums[0], i, 1)}
+    for (let i = 1; i < m.rows; i++) {m.setKey(nums[0], i, 1)}
     
     for (let j = 2; j < m.columns; j++) {
-        for (let i = 1; i < m.raws; i++) {
+        for (let i = 1; i < m.rows; i++) {
             m.setKey(Math.max(Number(m.getKey(i, j-1)), nums[j-1] + Number(m.getKey(i, j-2))), i, j)
         }
     }
     
     console.log(m.mat)
 
-    let solution: matrixField = m.getKey(m.raws-1, m.columns-1)
+    let solution: matrixField = m.getKey(m.rows-1, m.columns-1)
     if (typeof solution == "number") return solution
     return Infinity
 }
